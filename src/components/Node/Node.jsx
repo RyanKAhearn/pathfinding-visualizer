@@ -2,8 +2,10 @@ import React from 'react';
 
 import './Node.css';
 
-export default Node = React.forwardRef((props, ref) => {
+export const Node = React.forwardRef((props, ref) => {
     const {
+        row,
+        col,
         isFinish,
         isStart,
         isWall,
@@ -12,6 +14,7 @@ export default Node = React.forwardRef((props, ref) => {
     return (
         <div
             name='node'
+            id={`node-${row}-${col}`}
             className={`node ${extraClassName}`}
             ref={ref}></div>
     );
