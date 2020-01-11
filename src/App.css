@@ -1,4 +1,6 @@
 .App {
+  background-color: #282c34;
+  height: 100vh;
   text-align: center;
 }
 
@@ -35,4 +37,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+document {
+  background-color: rgb(30, 30, 30);
 }
