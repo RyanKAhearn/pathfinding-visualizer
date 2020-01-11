@@ -12,6 +12,35 @@ const FINISH_NODE_COL = 35;
 
 export default function PathfindingVisualizer(props) {
     const [grid, setGrid] = useState(getInitialGrid());
+    const [mouseIsPressed, setMouseIsPressed] = useState(false);
+
+    useEffect(() => {
+        const handleMouseDown = (e) => {
+            if (e.target.id.startsWith('node')) {
+                let parts = e.target.id.split('-');
+                setGrid(g => getNewGridWithWallToggled(g, parseInt(parts[1]), parseInt(parts[2])));
+            }
+            setMouseIsPressed(true);
+        }
+        document.addEventListener('mousedown', handleMouseDown);
+
+        const handleMouseUp = () => {
+            setMouseIsPressed(false);
+        }
+        document.addEventListener('mouseup', handleMouseUp);
+
+        return () => {
+            document.removeEventListener('mousedown', handleMouseDown);
+            document.removeEventListener('mouseup', handleMouseUp);
+        }
+    }, []);
+
+    const handleMouseEnter = (row, col) => {
+        if (mouseIsPressed) {
+            setGrid(getNewGridWithWallToggled(grid, row, col));
+        }
+    }
+
     return (
         <>
             <button>Visualize Dijkstra's Algorithm</button>
@@ -29,7 +58,8 @@ export default function PathfindingVisualizer(props) {
                                         key={colIdx}
                                         isFinish={isFinish}
                                         isStart={isStart}
-                                        isWall={isWall} />
+                                        isWall={isWall}
+                                        onMouseEnter={() => handleMouseEnter(row, col)} />
                                 );
                             })}
                         </div>
@@ -66,3 +96,14 @@ function createNode(row, col) {
         previousNode: null
     }
 }
+
+function getNewGridWithWallToggled(grid, row, col) {
+    const newGrid = grid.slice();
+    const node = newGrid[row][col];
+    const newNode = {
+        ...node,
+        isWall: !node.isWall,
+    };
+    newGrid[row][col] = newNode;
+    return newGrid;
+};
