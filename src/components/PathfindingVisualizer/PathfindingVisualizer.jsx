@@ -11,41 +11,67 @@ const FINISH_NODE_COL = 35;
 
 
 export default function PathfindingVisualizer(props) {
-    const [grid, setGrid] = useState(getInitialGrid());
-    const [mouseIsPressed, setMouseIsPressed] = useState(false);
+    const [state, setState] = useState({
+        grid: getInitialGrid(),
+        mouseIsPressed: false
+    });
 
     useEffect(() => {
         const handleMouseDown = (e) => {
+            e.preventDefault();
             if (e.target.id.startsWith('node')) {
                 let parts = e.target.id.split('-');
-                setGrid(g => getNewGridWithWallToggled(g, parseInt(parts[1]), parseInt(parts[2])));
+                setState(s => ({
+                    ...s,
+                    grid: getNewGridWithWallToggled(s.grid, parseInt(parts[1]), parseInt(parts[2])),
+                    mouseIsPressed: true
+                }));
+            } else {
+                setState(s => ({
+                    ...s,
+                    mouseIsPressed: true
+                }));
             }
-            setMouseIsPressed(true);
         }
         document.addEventListener('mousedown', handleMouseDown);
 
         const handleMouseUp = () => {
-            setMouseIsPressed(false);
+            setState(s => ({
+                ...s,
+                mouseIsPressed: false
+            }));
         }
         document.addEventListener('mouseup', handleMouseUp);
+
+
+        const handleMouseEnter = (e) => {
+            setState(s => {
+                if (s.mouseIsPressed && e.target.id.startsWith('node')) {
+                    let parts = e.target.id.split('-');
+                    return {
+                        ...s,
+                        grid: getNewGridWithWallToggled(s.grid, parseInt(parts[1]), parseInt(parts[2])),
+                        mouseIsPressed: true
+                    };
+                } else {
+                    return s;
+                }
+            })
+        }
+        document.addEventListener('mouseenter', handleMouseEnter, true);
 
         return () => {
             document.removeEventListener('mousedown', handleMouseDown);
             document.removeEventListener('mouseup', handleMouseUp);
+            document.removeEventListener('mouseenter', handleMouseEnter);
         }
     }, []);
-
-    const handleMouseEnter = (row, col) => {
-        if (mouseIsPressed) {
-            setGrid(getNewGridWithWallToggled(grid, row, col));
-        }
-    }
 
     return (
         <>
             <button>Visualize Dijkstra's Algorithm</button>
             <div className="grid">
-                {grid.map((row, rowIdx) => {
+                {state.grid.map((row, rowIdx) => {
                     return (
                         <div key={rowIdx}>
                             {row.map((node, colIdx) => {
@@ -58,8 +84,7 @@ export default function PathfindingVisualizer(props) {
                                         key={colIdx}
                                         isFinish={isFinish}
                                         isStart={isStart}
-                                        isWall={isWall}
-                                        onMouseEnter={() => handleMouseEnter(row, col)} />
+                                        isWall={isWall} />
                                 );
                             })}
                         </div>

@@ -9,14 +9,13 @@ export const Node = React.forwardRef((props, ref) => {
         isFinish,
         isStart,
         isWall,
-        onMouseEnter
     } = props;
     const extraClassName = isFinish ? 'node-finish' : isStart ? 'node-start' : isWall ? 'node-wall' : '';
     return (
         <div
             id={`node-${row}-${col}`}
             className={`node ${extraClassName}`}
-            onMouseEnter={onMouseEnter}
-            ref={ref}></div>
+            ref={ref}
+            draggable="false"></div>
     );
 })
