@@ -70,6 +70,10 @@ export default function PathfindingVisualizer(props) {
     return (
         <>
             <button>Visualize Dijkstra's Algorithm</button>
+            <button onClick={() => setState({
+                ...state,
+                grid: getInitialGrid()
+            })}>Clear Board</button>
             <div className="grid">
                 {state.grid.map((row, rowIdx) => {
                     return (
