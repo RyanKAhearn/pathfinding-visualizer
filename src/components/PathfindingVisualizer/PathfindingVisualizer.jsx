@@ -167,7 +167,7 @@ function visualizeDijkstra(grid, startNode, endNode) {
 
 function animateSearch(visitedNodesInOrder, endNode) {
   for (let i = 1; i < visitedNodesInOrder.length; i++) {
-    if (i === visitedNodesInOrder.length - 1 && visitedNodesInOrder === endNode) {
+    if (i === visitedNodesInOrder.length - 1 && visitedNodesInOrder[i] === endNode) {
       setTimeout(() => animateShortestPath(endNode.previousNode), 10 * i);
     } else {
       setTimeout(() => {
