@@ -46,6 +46,10 @@
     background-color: rgba(0, 190, 218, 0.75);
   }
 }
+
+.node-weight {
+  background-color: orange;
+}
   
 .node-wall {
   animation-name: animateWall;

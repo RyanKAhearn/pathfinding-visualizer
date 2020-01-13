@@ -9,8 +9,9 @@ export const Node = React.forwardRef((props, ref) => {
     isFinish,
     isStart,
     isWall,
+    weight
   } = props;
-  const extraClassName = isFinish ? 'node-finish' : isStart ? 'node-start' : isWall ? 'node-wall' : '';
+  const extraClassName = isFinish ? 'node-finish' : isStart ? 'node-start' : isWall ? 'node-wall' : weight > 1 ? 'node-weight' : '';
   return (
     <div
       id={`node-${row}-${col}`}

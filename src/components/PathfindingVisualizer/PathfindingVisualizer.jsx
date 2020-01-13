@@ -13,7 +13,8 @@ const FINISH_NODE_COL = 35;
 export default function PathfindingVisualizer(props) {
   const [state, setState] = useState({
     grid: getInitialGrid(),
-    mouseIsPressed: false
+    mouseIsPressed: false,
+    wIsPressed: false
   });
 
   useEffect(() => {
@@ -21,11 +22,17 @@ export default function PathfindingVisualizer(props) {
       e.preventDefault();
       if (e.target.id.startsWith('node')) {
         let parts = e.target.id.split('-');
-        setState(s => ({
-          ...s,
-          grid: getNewGridWithWallToggled(s.grid, parseInt(parts[1]), parseInt(parts[2])),
-          mouseIsPressed: true
-        }));
+        setState(s => 
+          s.wIsPressed ? {
+            ...s,
+            grid: getNewGridWithWeightToggled(s.grid, parseInt(parts[1]), parseInt(parts[2])),
+            mouseIsPressed: true
+          } : {
+            ...s,
+            grid: getNewGridWithWallToggled(s.grid, parseInt(parts[1]), parseInt(parts[2])),
+            mouseIsPressed: true
+          }
+        );
       } else {
         setState(s => ({
           ...s,
@@ -43,15 +50,40 @@ export default function PathfindingVisualizer(props) {
     }
     document.addEventListener('mouseup', handleMouseUp);
 
+    const handleKeyDown = (e) => {
+      if (e.isComposing || e.keyCode === 229) return;
+      
+      if (e.code === 'KeyW') {
+        setState(s => s.wIsPressed ? s : ({
+          ...s,
+          wIsPressed: true
+        }));
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+
+    const handleKeyUp = (e) => {
+      if (e.isComposing || e.keyCode === 229) return;
+
+      if (e.code === 'KeyW') {
+        setState(s => ({
+          ...s,
+          wIsPressed: false
+        }));
+      }
+    }
+    document.addEventListener('keyup', handleKeyUp);
 
     const handleMouseEnter = (e) => {
       setState(s => {
         if (s.mouseIsPressed && e.target.id.startsWith('node')) {
           let parts = e.target.id.split('-');
-          return {
+          return s.wIsPressed ? {
+            ...s,
+            grid: getNewGridWithWeightToggled(s.grid, parseInt(parts[1]), parseInt(parts[2])),
+          } : {
             ...s,
             grid: getNewGridWithWallToggled(s.grid, parseInt(parts[1]), parseInt(parts[2])),
-            mouseIsPressed: true
           };
         } else {
           return s;
@@ -63,6 +95,8 @@ export default function PathfindingVisualizer(props) {
     return () => {
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
       document.removeEventListener('mouseenter', handleMouseEnter);
     }
   }, []);
@@ -81,7 +115,7 @@ export default function PathfindingVisualizer(props) {
           return (
             <div key={rowIdx}>
               {row.map((node, colIdx) => {
-                const { row, col, isFinish, isStart, isWall, ref } = node;
+                const { row, col, isFinish, isStart, isWall, ref, weight } = node;
                 return (
                   <Node
                     ref={ref}
@@ -90,7 +124,8 @@ export default function PathfindingVisualizer(props) {
                     key={colIdx}
                     isFinish={isFinish}
                     isStart={isStart}
-                    isWall={isWall} />
+                    isWall={isWall}
+                    weight={weight} />
                 );
               })}
             </div>
@@ -155,6 +190,17 @@ function getNewGridWithWallToggled(grid, row, col) {
   const newNode = {
     ...node,
     isWall: !node.isWall,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
+}
+
+function getNewGridWithWeightToggled(grid, row, col) {
+  const newGrid = grid.slice();
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    weight: node.weight ^ 11,
   };
   newGrid[row][col] = newNode;
   return newGrid;

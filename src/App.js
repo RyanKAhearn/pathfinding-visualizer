@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import PathfindingVisualizer from './components/PathfindingVisualizer/PathfindingVisualizer';
 import './App.css';
 
