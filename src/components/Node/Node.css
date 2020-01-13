@@ -47,8 +47,33 @@
   }
 }
 
+
 .node-weight {
-  background-color: orange;
+  animation-name: weightAnimation;
+  animation-duration: 0.75s;
+  animation-timing-function: ease-out;
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+}
+  
+@keyframes weightAnimation {
+  0% {
+    transform: scale(1);
+    background-color: rgb(117, 20, 121);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: rgb(117, 20, 121);
+  }
+
+  100% {
+    transform: scale(1);
+    background-color: rgb(117, 20, 121);
+  }
 }
   
 .node-wall {
