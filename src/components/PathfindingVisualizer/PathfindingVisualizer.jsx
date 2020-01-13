@@ -147,6 +147,9 @@ function createNode(row, col) {
 }
 
 function getNewGridWithWallToggled(grid, row, col) {
+  if (grid[row][col].isStart || grid[row][col].isFinish) {
+    return grid;
+  }
   const newGrid = grid.slice();
   const node = newGrid[row][col];
   const newNode = {
