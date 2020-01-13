@@ -164,7 +164,7 @@ function visualizeDijkstra(grid, startNode, endNode) {
 
 function animateSearch(visitedNodesInOrder, endNode) {
   for (let i = 1; i < visitedNodesInOrder.length; i++) {
-    if (i === visitedNodesInOrder.length - 1) {
+    if (i === visitedNodesInOrder.length - 1 && visitedNodesInOrder === endNode) {
       setTimeout(() => animateShortestPath(endNode.previousNode), 10 * i);
     } else {
       setTimeout(() => {
@@ -177,7 +177,7 @@ function animateSearch(visitedNodesInOrder, endNode) {
 
 function animateShortestPath(node) {
   let i = 0;
-  while (node.previousNode !== null) {
+  while (node !== null && node.previousNode !== null) {
     setTimeout(((n) => {
       return () => {
         n.ref.current.className = 'node node-shortest-path';
