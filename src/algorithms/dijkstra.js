@@ -14,9 +14,10 @@ export function dijkstra(grid, startNode, endNode) {
     startNode.seen = true;
     while (nodesToVisit.length > 0) {
         let closestNode = getClosestNode(nodesToVisit);
+        
         visitedNodes.push(closestNode);
 
-        if (closestNode == endNode) {
+        if (closestNode === endNode) {
             return visitedNodes;
         }
 
@@ -40,7 +41,7 @@ function getClosestNode(nodes) {
         }
     }
 
-    if (closestIndex != nodes.length - 1) {
+    if (closestIndex !== nodes.length - 1) {
         let temp = nodes[closestIndex];
         nodes[closestIndex] = nodes[nodes.length - 1];
         nodes[nodes.length - 1] = temp;
@@ -65,7 +66,7 @@ function getNeighbors(closestNode, grid, nodesToVisit) {
         let node = grid[row-1][col];
         if (node.distance > distance + node.weight) {
             node.distance = distance + node.weight;
-            node.previous = closestNode;
+            node.previousNode = closestNode;
         }
         if (!node.seen && !node.isWall) {
             node.seen = true;
@@ -77,7 +78,7 @@ function getNeighbors(closestNode, grid, nodesToVisit) {
         let node = grid[row+1][col];
         if (node.distance > distance + node.weight) {
             node.distance = distance + node.weight;
-            node.previous = closestNode;
+            node.previousNode = closestNode;
         }
         if (!node.seen && !node.isWall) {
             node.seen = true;
@@ -89,7 +90,7 @@ function getNeighbors(closestNode, grid, nodesToVisit) {
         let node = grid[row][col - 1];
         if (node.distance > distance + node.weight) {
             node.distance = distance + node.weight;
-            node.previous = closestNode;
+            node.previousNode = closestNode;
         }
         if (!node.seen && !node.isWall) {
             node.seen = true;
@@ -102,7 +103,7 @@ function getNeighbors(closestNode, grid, nodesToVisit) {
         
         if (node.distance > distance + node.weight) {
             node.distance = distance + node.weight;
-            node.previous = closestNode;
+            node.previousNode = closestNode;
         }
         if (!node.seen && !node.isWall) {
             node.seen = true;

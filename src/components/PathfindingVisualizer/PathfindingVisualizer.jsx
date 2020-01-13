@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Node } from '../Node/Node';
-
+import { dijkstra } from '../../algorithms/dijkstra';
 
 import './PathfindingVisualizer.css';
 
@@ -69,10 +69,12 @@ export default function PathfindingVisualizer(props) {
 
   return (
     <>
-      <button>Visualize Dijkstra's Algorithm</button>
+      <button onClick={() =>
+        visualizeDijkstra(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
+      }>Visualize Dijkstra's Algorithm</button>
       <button onClick={() => setState({
         ...state,
-        grid: getInitialGrid()
+        grid: clearGrid(state.grid)
       })}>Clear Board</button>
       <div className="grid">
         {state.grid.map((row, rowIdx) => {
@@ -111,6 +113,23 @@ function getInitialGrid() {
   return grid;
 }
 
+function clearGrid(grid) {
+  return grid.map(row => 
+    row.map(node => {
+      const { isFinish, isStart } = node;
+      const extraClassName = isFinish ? 'node-finish' : isStart ? 'node-start' : '';
+      node.ref.current.className = `node ${extraClassName}`;
+      return {
+        ...node,
+        isWall: false,
+        weight: 1,
+        seen: false,
+        distance: Infinity,
+        previousNode: null
+      }
+    }));
+}
+
 function createNode(row, col) {
   const ref = React.createRef();
   return {
@@ -120,6 +139,7 @@ function createNode(row, col) {
     isStart: row === START_NODE_ROW && col === START_NODE_COL,
     isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
     distance: Infinity,
+    weight: 1,
     seen: false,
     isWall: false,
     previousNode: null
@@ -135,4 +155,35 @@ function getNewGridWithWallToggled(grid, row, col) {
   };
   newGrid[row][col] = newNode;
   return newGrid;
-};
+}
+
+function visualizeDijkstra(grid, startNode, endNode) {
+  const visitedNodesInOrder = dijkstra(grid, startNode, endNode);
+  animateSearch(visitedNodesInOrder, endNode);
+}
+
+function animateSearch(visitedNodesInOrder, endNode) {
+  for (let i = 1; i < visitedNodesInOrder.length; i++) {
+    if (i === visitedNodesInOrder.length - 1) {
+      setTimeout(() => animateShortestPath(endNode.previousNode), 10 * i);
+    } else {
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        node.ref.current.className = 'node node-visited';
+      }, 10 * i);
+    }
+  }
+}
+
+function animateShortestPath(node) {
+  let i = 0;
+  while (node.previousNode !== null) {
+    setTimeout(((n) => {
+      return () => {
+        n.ref.current.className = 'node node-shortest-path';
+      }
+    })(node), 50 * i);
+    node = node.previousNode;
+    i++;
+  }
+}
