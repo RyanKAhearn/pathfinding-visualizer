@@ -3,6 +3,7 @@ import { Node } from '../Node/Node';
 import { dijkstra } from '../../algorithms/dijkstra';
 
 import './PathfindingVisualizer.css';
+import { breadthFirstSearch } from '../../algorithms/breadthFirstSearch';
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -106,6 +107,9 @@ export default function PathfindingVisualizer(props) {
       <button onClick={() =>
         visualizeDijkstra(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
       }>Visualize Dijkstra's Algorithm</button>
+      <button onClick={() =>
+        visualizeBreadthFirstSearch(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
+      }>Visualize BFS Algorithm</button>
       <button onClick={() => setState({
         ...state,
         grid: clearGrid(state.grid)
@@ -211,10 +215,15 @@ function visualizeDijkstra(grid, startNode, endNode) {
   animateSearch(visitedNodesInOrder, endNode);
 }
 
+function visualizeBreadthFirstSearch(grid, startNode, endNode) {
+  const visitedNodesInOrder = breadthFirstSearch(grid, startNode, endNode);
+  animateSearch(visitedNodesInOrder, endNode);
+}
+
 function animateSearch(visitedNodesInOrder, endNode) {
   for (let i = 1; i < visitedNodesInOrder.length; i++) {
     if (i === visitedNodesInOrder.length - 1 && visitedNodesInOrder[i] === endNode) {
-      setTimeout(() => animateShortestPath(endNode.previousNode), 10 * i);
+      setTimeout(() => animatePath(endNode.previousNode), 10 * i);
     } else {
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
@@ -224,7 +233,7 @@ function animateSearch(visitedNodesInOrder, endNode) {
   }
 }
 
-function animateShortestPath(node) {
+function animatePath(node) {
   let i = 0;
   while (node !== null && node.previousNode !== null) {
     setTimeout(((n) => {
