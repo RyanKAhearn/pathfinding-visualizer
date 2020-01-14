@@ -4,6 +4,7 @@ import { dijkstra } from '../../algorithms/dijkstra';
 
 import './PathfindingVisualizer.css';
 import { breadthFirstSearch } from '../../algorithms/breadthFirstSearch';
+import { depthFirstSearch } from '../../algorithms/depthFisrtSearch';
 
 const START_NODE_ROW = 10;
 const START_NODE_COL = 15;
@@ -110,6 +111,9 @@ export default function PathfindingVisualizer(props) {
       <button onClick={() =>
         visualizeBreadthFirstSearch(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
       }>Visualize BFS Algorithm</button>
+      <button onClick={() =>
+        visualizeDepthFirstSearch(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
+      }>Visualize DFS Algorithm</button>
       <button onClick={() => setState({
         ...state,
         grid: clearGrid(state.grid)
@@ -217,6 +221,11 @@ function visualizeDijkstra(grid, startNode, endNode) {
 
 function visualizeBreadthFirstSearch(grid, startNode, endNode) {
   const visitedNodesInOrder = breadthFirstSearch(grid, startNode, endNode);
+  animateSearch(visitedNodesInOrder, endNode);
+}
+
+function visualizeDepthFirstSearch(grid, startNode, endNode) {
+  const visitedNodesInOrder = depthFirstSearch(grid, startNode, endNode);
   animateSearch(visitedNodesInOrder, endNode);
 }
 
