@@ -1,3 +1,12 @@
+/**
+ * An implementation of the breadth first search algorithm that returns a list of all visited 
+ * nodes in the order in which they were visited. The nodes contain a pointer to the previous 
+ * node that can be used to construct the shortest path between the node and the start.
+ * 
+ * @param {*} grid A 2d array of nodes representing the search area.
+ * @param {*} startNode The starting node for the search.
+ * @param {*} endNode The node to seach for.
+ */
 export function breadthFirstSearch(grid, startNode, endNode) {
   let queue = [startNode];
   let visitedNodes = [];

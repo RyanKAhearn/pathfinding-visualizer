@@ -144,6 +144,9 @@ export default function PathfindingVisualizer(props) {
   );
 }
 
+/**
+ * Create and return the initial grid of nodes.
+ */
 function getInitialGrid() {
   const grid = [];
   for (let row = 0; row < 20; row++) {
@@ -156,6 +159,11 @@ function getInitialGrid() {
   return grid;
 }
 
+/**
+ * Return a new grid reset to its initial state.
+ * 
+ * @param {*} grid The current grid.
+ */
 function clearGrid(grid) {
   return grid.map(row => 
     row.map(node => {
@@ -173,6 +181,12 @@ function clearGrid(grid) {
     }));
 }
 
+/**
+ * Create and return a new node that is to be located at the specified row and column.
+ * 
+ * @param {*} row The 0 based index of row the node will be located at.
+ * @param {*} col The 0 based index of the column the node will be located at.
+ */
 function createNode(row, col) {
   const ref = React.createRef();
   return {
@@ -189,6 +203,14 @@ function createNode(row, col) {
   }
 }
 
+/**
+ * Returns a new grid with state of the node at the specified row and column
+ * being changed so the it is a wall only if it is not currently a wall.
+ * 
+ * @param {*} grid The current grid of nodes.
+ * @param {*} row The row of the node to toggle.
+ * @param {*} col The column of the node to toggle.
+ */
 function getNewGridWithWallToggled(grid, row, col) {
   if (grid[row][col].isStart || grid[row][col].isFinish) {
     return grid;
@@ -203,6 +225,14 @@ function getNewGridWithWallToggled(grid, row, col) {
   return newGrid;
 }
 
+/**
+ * Returns a new grid with the node at the specified row and column
+ * having its weight changed from 1 to 10 or 10 to 1.
+ * 
+ * @param {*} grid The current grid of nodes.
+ * @param {*} row The row of the node to change.
+ * @param {*} col The column of the node to change.
+ */
 function getNewGridWithWeightToggled(grid, row, col) {
   const newGrid = grid.slice();
   const node = newGrid[row][col];
@@ -229,6 +259,12 @@ function visualizeDepthFirstSearch(grid, startNode, endNode) {
   animateSearch(visitedNodesInOrder, endNode);
 }
 
+/**
+ * Causes the animation of the search to run.
+ * 
+ * @param {*} visitedNodesInOrder The list of nodes in the order the search algorithm visited them.
+ * @param {*} endNode The node the search algorithm was looking for.
+ */
 function animateSearch(visitedNodesInOrder, endNode) {
   for (let i = 1; i < visitedNodesInOrder.length; i++) {
     if (i === visitedNodesInOrder.length - 1 && visitedNodesInOrder[i] === endNode) {
@@ -242,6 +278,11 @@ function animateSearch(visitedNodesInOrder, endNode) {
   }
 }
 
+/**
+ * Causes the animation of the path found by the search algorithm to run.
+ * 
+ * @param {*} node The last node in the path.
+ */
 function animatePath(node) {
   let i = 0;
   while (node !== null && node.previousNode !== null) {
