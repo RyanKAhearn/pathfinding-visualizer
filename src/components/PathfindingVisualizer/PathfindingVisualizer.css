@@ -1,3 +1,24 @@
 .grid {
   margin: 100px 0 0;
 }
+
+.navbar {
+  overflow: hidden;
+  background-color: rgba(17, 104, 217, 0.75);
+}
+
+.navbar button {
+  color: whitesmoke;
+  border: none;
+  background-color: inherit;
+  text-align: center;
+  padding: 14px 16px;
+}
+
+.navbar button:hover {
+  background-color: #282c34;
+}
+
+p {
+  color: whitesmoke;
+}

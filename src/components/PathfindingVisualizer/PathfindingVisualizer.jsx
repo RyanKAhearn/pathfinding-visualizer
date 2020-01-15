@@ -105,19 +105,24 @@ export default function PathfindingVisualizer(props) {
 
   return (
     <>
-      <button onClick={() =>
-        visualizeDijkstra(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
-      }>Visualize Dijkstra's Algorithm</button>
-      <button onClick={() =>
-        visualizeBreadthFirstSearch(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
-      }>Visualize BFS Algorithm</button>
-      <button onClick={() =>
-        visualizeDepthFirstSearch(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
-      }>Visualize DFS Algorithm</button>
-      <button onClick={() => setState({
-        ...state,
-        grid: clearGrid(state.grid)
-      })}>Clear Board</button>
+      <nav className="navbar">
+        <button onClick={() =>
+          visualizeDijkstra(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
+        }>Visualize Dijkstra's Algorithm</button>
+        <button onClick={() =>
+          visualizeBreadthFirstSearch(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
+        }>Visualize BFS Algorithm</button>
+        <button onClick={() =>
+          visualizeDepthFirstSearch(state.grid, state.grid[START_NODE_ROW][START_NODE_COL], state.grid[FINISH_NODE_ROW][FINISH_NODE_COL])
+        }>Visualize DFS Algorithm</button>
+        <button onClick={() => setState({
+          ...state,
+          grid: clearGrid(state.grid)
+        })}>Clear Board</button>
+      </nav>
+      <p>
+        Use the mouse to toggle walls. Hold down the w key and use the mouse to add/remove weight to the nodes.
+      </p>
       <div className="grid">
         {state.grid.map((row, rowIdx) => {
           return (
