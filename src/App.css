@@ -1,5 +1,8 @@
-.App {
+* {
   background-color: #282c34;
+}
+
+.App {
   height: 100vh;
   text-align: center;
 }
